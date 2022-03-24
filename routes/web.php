@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'show'])->name('home');
 Route::get('/person/{person}', [\App\Http\Controllers\PeopleController::class, 'show'])->name('people.show');
 Route::get('/reports/people', [\App\Http\Controllers\PeopleReportController::class, 'show'])->name('reports.people');
+
+Route::get('mail', function () {
+    return new \App\Mail\ArrivalsAndDeparturesMail(\App\Models\People::take(10)->get(), \App\Models\People::take(10)->get());
+});

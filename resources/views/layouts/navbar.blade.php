@@ -20,8 +20,8 @@
                 </a>
 
                 <div class="navbar-dropdown">
-                    <a class="navbar-item" href="{{ route('home') }}">
-                        Logs
+                    <a class="navbar-item" href="{{ route('reports.people') }}">
+                        People
                     </a>
                     <hr class="navbar-divider">
                     <a class="navbar-item" href="{{ route('home') }}">

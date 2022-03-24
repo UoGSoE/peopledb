@@ -1,6 +1,141 @@
 <div>
-    <h3 class="title is-3">People</h3>
-    <table class="table is-fullwidth is-hoverable">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h3 class="title is-3">
+                    People
+                </h3>
+            </div>
+            <div class="level-item">
+                <button class="button is-small" wire:click.prevent="toggleFilterDisplay">@if ($showAllFilters) Less @else More @endif filters...</button>
+            </div>
+        </div>
+    </div>
+
+    </h3>
+    <div class="box">
+
+        @if ($showAllFilters)
+            <div class="columns">
+                <div class="column is-one-third">
+                    <div class="field">
+                        <label class="label">Type</label>
+                        <div class="control">
+                        <div class="select">
+                            <select wire:model="filterType">
+                            <option value=""></option>
+                            @foreach ($possibleTypes as $type)
+                                <option value="{{ $type->value }}">{{ $type->value }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                    <label class="label">Group</label>
+                    <div class="control">
+                        <div class="select">
+                        <select wire:model="filterGroup">
+                            <option value=""></option>
+                            @foreach ($possibleGroups as $group)
+                            <option value="{{ $group }}">{{ $group }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="field">
+                    <label class="label">Reports To</label>
+                    <div class="control">
+                        <div class="select">
+                        <select wire:model="filterReportsTo">
+                            <option value=""></option>
+                            @foreach ($possibleReportsTo as $reportsTo)
+                            <option value="{{ $reportsTo->id }}">{{ $reportsTo->full_name }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column is-one-third">
+                    <label class="label">Arriving in the next</label>
+                    <div class="field has-addons">
+                        <div class="control">
+                        <input class="input" type="text" wire:model="filterArrivingInDays">
+                        </div>
+                        <p class="control">
+                            <a class="button is-static">
+                            Days
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="column is-one-third"></div>
+                <div class="column is-one-third">
+                    <label class="label">Leaving in the next</label>
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input class="input" type="text" wire:model="filterLeavingInDays">
+                        </div>
+                        <p class="control">
+                            <a class="button is-static">
+                                Days
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column is-one-third">
+                    <label class="label">Arrived in the last</label>
+                    <div class="field has-addons">
+                        <div class="control">
+                        <input class="input" type="text" wire:model="filterArrivedInDays">
+                        </div>
+                        <p class="control">
+                            <a class="button is-static">
+                            Days
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="column is-one-third"></div>
+                <div class="column is-one-third">
+                    <label class="label">Left in the last</label>
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input class="input" type="text" wire:model="filterLeftInDays">
+                        </div>
+                        <p class="control">
+                            <a class="button is-static">
+                                Days
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label">Search...</label>
+                    <div class="control">
+                        <input class="input" type="text" wire:model="filterSearch">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table is-striped is-fullwidth is-hoverable">
         <thead>
             <tr>
                 <th>Name</th>

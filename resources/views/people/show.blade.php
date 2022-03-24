@@ -4,17 +4,19 @@
 
 
 <div class="box">
-    <h3 class="title is-3">{{ $person->full_name }}</h3>
+    <h3 class="title is-3">
+        {{ $person->full_name }} <span class="has-text-weight-light has-text-grey">({{ $person->username }})</span>
+    </h3>
     <div class="columns">
         <div class="column">
-            <h4 class="title is-4">Email</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Email</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 <a href="mailto:{{ $person->email }}">{{ $person->email }}</a>
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4">Phone</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Phone</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 @if ($person->phone)
                     <a href="tel:{{ $person->phone }}">{{ $person->phone }}</a>
                 @else
@@ -23,34 +25,34 @@
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4">Type</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Type</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->type->value }}
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4">Group</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Group</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->group }}
             </p>
         </div>
     </div>
     <div class="columns">
         <div class="column">
-            <h4 class="title is-4">Starts</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Starts</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->start_at?->format('d/m/Y') }}
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4">Ends</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Ends</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->end_at?->format('d/m/Y') }}
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4">Reports To</h4>
-            <p class="subtitle">
+            <h4 class="title is-4  has-text-grey">Reports To</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 @if ($person->reportsTo)
                     <a href="{{ route('people.show', $person->reportsTo) }}">{{ $person->reportsTo->full_name }}</a>
                 @else
@@ -58,10 +60,16 @@
                 @endif
             </p>
         </div>
-        <div class="column"></div>
+        <div class="column">
+            <h4 class="title is-4  has-text-grey">MS Teams</h4>
+            <p class="subtitle has-text-grey-dark has-text-weight-medium">
+                <span><a class="button is-small" href="callto:{{ $person->email }}">Call</a></span>
+                <span><a class="button is-small" href="https://teams.microsoft.com/l/chat/0/0?users={{ $person->email }}">Chat</a></span>
+            </p>
+        </div>
     </div>
     @if ($person->reportees)
-    <h4 class="title is-4">Reportees</h4>
+    <h4 class="title is-4  has-text-grey">Reportees</h4>
     <table class="table is-full-width is-striped is-hoverable">
         <thead>
             <tr>
