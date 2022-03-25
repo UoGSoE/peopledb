@@ -126,4 +126,16 @@ class PeopleReportTest extends TestCase
             ->assertDontSee($arrivingPhd->full_name)
             ;
     }
+
+    /** @test */
+    public function users_can_export_the_current_filtered_data_as_an_excel_file()
+    {
+        $user = User::factory()->create();
+
+        $livewireResponse = Livewire::actingAs($user)->test('people-report')
+            ->call('exportExcel')
+            ->assertOk();
+        $this->assertEquals('people_report_' . now()->format('d_m_Y_H_i') . '.xlsx', $livewireResponse->payload['effects']['download']['name']);
+        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $livewireResponse->payload['effects']['download']['contentType']);
+    }
 }

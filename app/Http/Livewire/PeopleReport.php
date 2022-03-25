@@ -3,8 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\People;
-use App\Models\PeopleType;
 use Livewire\Component;
+use App\Models\PeopleType;
+use Ohffs\SimpleSpout\ExcelSheet;
 
 class PeopleReport extends Component
 {
@@ -106,5 +107,39 @@ class PeopleReport extends Component
     public function toggleFilterDisplay()
     {
         $this->showAllFilters = !$this->showAllFilters;
+    }
+
+    public function exportExcel()
+    {
+        $people = $this->getFilteredPeople()->map(function ($person) {
+            return [
+                $person->full_name,
+                $person->email,
+                $person->start_at?->format('d/m/Y') ?? '',
+                $person->end_at?->format('d/m/Y') ?? '',
+                $person->type->value ?? '',
+                $person->group ?? '',
+                $person->reportsTo?->full_name ?? '',
+                $person->reportsTo?->email ?? '',
+            ];
+        });
+        $people->prepend([
+            'Name',
+            'Email',
+            'Start Date',
+            'End Date',
+            'Type',
+            'Group',
+            'Reports To',
+            'Reports To Email',
+        ]);
+        $filename = 'people_report_' . now()->format('d_m_Y_H_i') . '.xlsx';
+        $tempSheet = (new ExcelSheet())->generate($people->toArray());
+
+        return response()->download(
+            $tempSheet,
+            $filename,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        )->deleteFileAfterSend(true);
     }
 }

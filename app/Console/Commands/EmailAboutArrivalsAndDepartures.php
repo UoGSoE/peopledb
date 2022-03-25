@@ -30,19 +30,12 @@ class EmailAboutArrivalsAndDepartures extends Command
      */
     public function handle()
     {
-        $upcomingArrivals = People::where('start_at', '>', now())
-            ->where('start_at', '<', now()->addDays(config('peopledb.recent_days_arriving')))
-            ->orderBy('start_at')
-            ->with('reportsTo')
-            ->get();
-        $upcomingDepartures = People::where('end_at', '>', now())
-            ->where('end_at', '<', now()->addDays(config('peopledb.recent_days_leaving')))
-            ->orderBy('end_at')
-            ->with('reportsTo')
-            ->get();
+        $arrivalsAndDepartures = (new People())->getArrivalsAndDepartures();
 
         collect(config('peopledb.arrivals_departures_recipients'))
-            ->each(fn ($recipient) => Mail::to($recipient)->queue(new ArrivalsAndDeparturesMail($upcomingArrivals, $upcomingDepartures)));
+            ->each(fn ($recipient) => Mail::to($recipient)->queue(
+                new ArrivalsAndDeparturesMail($arrivalsAndDepartures)
+            ));
 
         return Command::SUCCESS;
     }

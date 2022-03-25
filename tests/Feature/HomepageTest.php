@@ -31,4 +31,16 @@ class HomepageTest extends TestCase
         $response->assertSee($leftRecentlyPerson->surname);
         $response->assertDontSee($regularPerson->surname);
     }
+
+    /** @test */
+    public function users_can_export_the_data_as_an_excel_sheet()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('export.arrivals_departures'));
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->assertHeader('Content-Disposition', 'attachment; filename=arrivals_departures_' . now()->format('d_m_Y_H_i') . '.xlsx');
+    }
 }

@@ -7,7 +7,7 @@
                 </h3>
             </div>
             <div class="level-item">
-                <button class="button is-small" wire:click.prevent="toggleFilterDisplay">@if ($showAllFilters) Less @else More @endif filters...</button>
+                <button class="button is-small" wire:click.prevent="toggleFilterDisplay">@if ($showAllFilters) Hide @else Show @endif filters...</button>
             </div>
         </div>
     </div>
@@ -126,11 +126,14 @@
         @endif
         <div class="columns">
             <div class="column">
-                <div class="field">
-                    <label class="label">Search...</label>
-                    <div class="control">
+                <label class="label">Search...</label>
+                <div class="field is-grouped">
+                    <div class="control is-expanded">
                         <input class="input" type="text" wire:model="filterSearch">
                     </div>
+                    <p class="control">
+                        <button class="button" wire:click.prevent="exportExcel">Export</button>
+                    </p>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5154134d4d75104a30e273eb7961e106",
+    "content-hash": "72e5c71cf959b2ef0094c75a5aae4b50",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -9095,6 +9095,46 @@
                 }
             ],
             "time": "2022-01-18T17:49:08+00:00"
+        },
+        {
+            "name": "ohffs/counts-database-queries-trait",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ohnotnow/counts_database_queries.git",
+                "reference": "aa275a0117c2c76d9dcfdb059e549da202d42725"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ohnotnow/counts_database_queries/zipball/aa275a0117c2c76d9dcfdb059e549da202d42725",
+                "reference": "aa275a0117c2c76d9dcfdb059e549da202d42725",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ohffs\\CountsDatabaseQueries\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ohffs",
+                    "email": "ohffsnotnow@gmail.com"
+                }
+            ],
+            "description": "Laravel testing trait to count and track database queries",
+            "support": {
+                "issues": "https://github.com/ohnotnow/counts_database_queries/issues",
+                "source": "https://github.com/ohnotnow/counts_database_queries/tree/1.0.2"
+            },
+            "time": "2022-02-23T17:24:34+00:00"
         },
         {
             "name": "spatie/flare-client-php",

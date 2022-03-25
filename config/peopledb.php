@@ -6,4 +6,5 @@ return [
     ],
     'recent_days_arriving' => 20,
     'recent_days_leaving' => 20,
+    'recentish_days_fudge_factor' => 14,
 ];

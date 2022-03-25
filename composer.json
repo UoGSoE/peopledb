@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "archtechx/enums": "^0.2.0",
+        "box/spout": "^3.3",
         "brianium/paratest": "^6.4",
         "guzzlehttp/guzzle": "^7.2",
         "lab404/laravel-impersonate": "^1.7",
@@ -27,6 +28,7 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
+        "ohffs/counts-database-queries-trait": "^1.0",
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },

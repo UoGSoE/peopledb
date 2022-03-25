@@ -16,7 +16,7 @@
 
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
-                    Admin
+                    More
                 </a>
 
                 <div class="navbar-dropdown">
@@ -26,6 +26,9 @@
                     <hr class="navbar-divider">
                     <a class="navbar-item" href="{{ route('home') }}">
                         Options
+                    </a>
+                    <a class="navbar-item" href="{{ route('home') }}">
+                        Manage Access
                     </a>
                 </div>
             </div>

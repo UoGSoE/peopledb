@@ -16,6 +16,10 @@ class People extends Model
         'type' => PeopleType::class,
     ];
 
+    protected $fillable = [
+        'end_at',
+    ];
+
     public function reportsTo()
     {
         return $this->belongsTo(People::class, 'reports_to');
@@ -26,10 +30,66 @@ class People extends Model
         return $this->hasMany(People::class, 'reports_to');
     }
 
+    public function scopeCurrent($query)
+    {
+        return $query->where('end_at', '>=', now())->where('start_at', '<=', now());
+    }
+
+    public function scopeRecentlyArrived($query)
+    {
+        return $query->where('start_at', '<=', now())
+            ->where('start_at', '>', now()->subDays(config('peopledb.recent_days_arriving')));
+    }
+
+    public function scopeRecentlyLeft($query)
+    {
+        return $query->where('end_at', '<=', now())
+            ->where('end_at', '>', now()->subDays(config('peopledb.recent_days_leaving')));
+    }
+
+    public function scopeArrivingSoon($query, $includingDaysPast = 0)
+    {
+        return $query->where('start_at', '>', now()->subDays($includingDaysPast))
+            ->where('start_at', '<', now()->addDays(config('peopledb.recent_days_arriving')));
+    }
+
+    public function scopeLeavingSoon($query, $includingDaysPast = 0)
+    {
+        return $query->where('end_at', '>', now()->subDays($includingDaysPast))
+            ->where('end_at', '<', now()->addDays(config('peopledb.recent_days_leaving')));
+    }
+
     public function fullName(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $this->forenames . ' ' . $this->surname,
+        );
+    }
+
+    public function getArrivalsAndDepartures(): ArrivalsDeparturesDto
+    {
+        $recentlyArrived = People::recentlyArrived()
+            ->orderBy('start_at')
+            ->with('reportsTo')
+            ->get();
+        $recentlyLeft = People::recentlyLeft()
+            ->orderBy('end_at')
+            ->with('reportsTo')
+            ->get();
+        $upcomingArrivals = People::arrivingSoon()
+            ->orderBy('start_at')
+            ->with('reportsTo')
+            ->get();
+        $upcomingDepartures = People::leavingSoon()
+            ->orderBy('end_at')
+            ->with('reportsTo')
+            ->get();
+
+        return new ArrivalsDeparturesDto(
+            $upcomingArrivals,
+            $upcomingDepartures,
+            $recentlyArrived,
+            $recentlyLeft,
         );
     }
 }

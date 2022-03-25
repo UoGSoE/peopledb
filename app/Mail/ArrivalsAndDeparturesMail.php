@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\ArrivalsDeparturesDto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,7 +18,7 @@ class ArrivalsAndDeparturesMail extends Mailable
      *
      * @return void
      */
-    public function __construct(public $arrivals, public $departures)
+    public function __construct(public ArrivalsDeparturesDto $arrivalsAndDepartures)
     {
     }
 

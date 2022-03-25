@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('peopledb:email-arrivals-and-departures')->weeklyOn(1, '07:45'); // monday at 7:45am
+        $schedule->command('peopledb:record-stats')->dailyAt('23:55');
     }
 
     /**
