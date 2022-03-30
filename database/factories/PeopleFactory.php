@@ -19,7 +19,7 @@ class PeopleFactory extends Factory
     public function definition()
     {
         return [
-            'username' => $this->faker->userName(),
+            'username' => implode('', $this->faker->randomElements(str_split('abcdefghijklmnopqrstuvwxyz'), 3)) . $this->faker->randomNumber(1) . $this->faker->randomLetter(),
             'surname' => $this->faker->lastName(),
             'forenames' => $this->faker->firstName(),
             'email' => $this->faker->safeEmail(),
@@ -27,7 +27,7 @@ class PeopleFactory extends Factory
             'start_at' => now()->subWeeks(rand(10, 20)),
             'end_at' => now()->addYears(rand(1, 3)),
             'type' => collect(PeopleType::values())->random(),
-            'group' => $this->faker->jobTitle(),
+            'group' => collect(['Civil', 'Bio', 'Nano', 'Aero', 'Mech'])->random(),
         ];
     }
 

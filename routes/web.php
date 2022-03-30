@@ -17,3 +17,6 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'show'])->name('ho
 Route::get('/person/{person}', [\App\Http\Controllers\PeopleController::class, 'show'])->name('people.show');
 Route::get('/reports/people', [\App\Http\Controllers\PeopleReportController::class, 'show'])->name('reports.people');
 Route::get('/export/arrivals-departures', [\App\Http\Controllers\ExportController::class, 'arrivalsDepartures'])->name('export.arrivals_departures');
+Route::get('/reports/stats', [\App\Http\Controllers\StatsReportController::class, 'show'])->name('reports.stats');
+Route::get('/options', [\App\Http\Controllers\OptionsController::class, 'edit'])->name('options.edit');
+Route::post('/options', [\App\Http\Controllers\OptionsController::class, 'update'])->name('options.update');

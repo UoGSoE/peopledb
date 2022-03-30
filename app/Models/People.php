@@ -20,6 +20,10 @@ class People extends Model
         'end_at',
     ];
 
+    protected $appends = [
+        'full_name',
+    ];
+
     public function reportsTo()
     {
         return $this->belongsTo(People::class, 'reports_to');
@@ -33,6 +37,16 @@ class People extends Model
     public function scopeCurrent($query)
     {
         return $query->where('end_at', '>=', now())->where('start_at', '<=', now());
+    }
+
+    public function scopeType($query, string $type)
+    {
+        return $query->where('type', '=', $type);
+    }
+
+    public function scopeGroup($query, string $group)
+    {
+        return $query->where('group', '=', $group);
     }
 
     public function scopeRecentlyArrived($query)

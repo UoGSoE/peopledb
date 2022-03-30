@@ -105,10 +105,9 @@ class DailyStatsTest extends TestCase
     /** @test */
     public function there_is_a_page_where_users_can_view_the_stats()
     {
-        $this->markTestSkipped('TODO');
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('report.stats'));
+        $response = $this->actingAs($user)->get(route('reports.stats'));
 
         $response->assertOk();
         $response->assertSee('Stats and Trends');

@@ -23,8 +23,11 @@
                     <a class="navbar-item" href="{{ route('reports.people') }}">
                         People
                     </a>
+                    <a class="navbar-item" href="{{ route('reports.stats') }}">
+                        Stats/Trends
+                    </a>
                     <hr class="navbar-divider">
-                    <a class="navbar-item" href="{{ route('home') }}">
+                    <a class="navbar-item" href="{{ route('options.edit') }}">
                         Options
                     </a>
                     <a class="navbar-item" href="{{ route('home') }}">

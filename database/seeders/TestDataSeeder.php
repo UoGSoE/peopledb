@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\People;
+use App\Models\PeopleType;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -28,11 +29,9 @@ class TestDataSeeder extends Seeder
         foreach (range(1, rand(10, 20)) as $count) {
             People::factory()->leavingSoon()->create();
         }
-        People::all()->each(function ($person) {
-            if (rand(1, 3) === 1) {
-                $person->update([
-                    'reports_to' => People::inRandomOrder()->first()->id,
-                ]);
+        People::where('type', '=', PeopleType::ACADEMIC)->get()->each(function ($person) {
+            foreach (range(1, rand(5, 15)) as $i) {
+                People::inRandomOrder()->first()->update(['reports_to' => $person->id]);
             }
         });
     }

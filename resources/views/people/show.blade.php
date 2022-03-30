@@ -68,9 +68,10 @@
             </p>
         </div>
     </div>
-    @if ($person->reportees)
+    @if (count($person->reportees) > 0)
+    <hr>
     <h4 class="title is-4  has-text-grey">Reportees</h4>
-    <table class="table is-full-width is-striped is-hoverable">
+    <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
             <tr>
                 <th>Name</th>
