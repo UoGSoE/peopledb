@@ -39,13 +39,13 @@
     </div>
     <div class="columns">
         <div class="column">
-            <h4 class="title is-4  has-text-grey">Starts</h4>
+            <h4 class="title is-4  has-text-grey">@if ($person->start_at?->isBefore(now())) Started @else Starts @endif</h4>
             <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->start_at?->format('d/m/Y') }}
             </p>
         </div>
         <div class="column">
-            <h4 class="title is-4  has-text-grey">Ends</h4>
+            <h4 class="title is-4  has-text-grey">@if ($person->end_at?->isBefore(now())) Left @else Ends @endif</h4>
             <p class="subtitle has-text-grey-dark has-text-weight-medium">
                 {{ $person->end_at?->format('d/m/Y') }}
             </p>

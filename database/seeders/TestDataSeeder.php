@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\People;
-use App\Models\PeopleType;
+use App\Models\Task;
+use App\Models\Unit;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\People;
+use App\Models\UnitEmail;
+use App\Models\PeopleType;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TestDataSeeder extends Seeder
 {
@@ -17,6 +20,8 @@ class TestDataSeeder extends Seeder
      */
     public function run()
     {
+        $this->command->info('Seeding test data...');
+
         $admin = User::factory()->create([
             'username' => 'admin',
             'password' => bcrypt('secret'),
@@ -34,5 +39,12 @@ class TestDataSeeder extends Seeder
                 People::inRandomOrder()->first()->update(['reports_to' => $person->id]);
             }
         });
+
+        collect(['IT', 'Facilities', 'Teaching', 'Research Office', 'School Admin'])->each(fn ($name) => Unit::factory()->create([
+            'name' => $name,
+            'owner_id' => $admin->id,
+        ]));
+        Unit::get()->each(fn ($unit) => $unit->tasks()->saveMany(Task::factory()->times(rand(1, 10))->make()));
+        Unit::get()->each(fn ($unit) => $unit->emails()->saveMany(UnitEmail::factory()->times(rand(1, 3))->make()));
     }
 }

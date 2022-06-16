@@ -27,6 +27,9 @@
                         Stats/Trends
                     </a>
                     <hr class="navbar-divider">
+                    <a class="navbar-item" href="{{ route('units.index') }}">
+                        Units/Tasks
+                    </a>
                     <a class="navbar-item" href="{{ route('options.edit') }}">
                         Options
                     </a>

@@ -25,7 +25,6 @@ services:
         # MINIO_BUCKET: "exampapers"
         # MINIO_ENDPOINT: "${MINIO_QA_ENDPOINT}"
 excludes:
-  - vendor
   - node_modules
 tooling:
   mfs:
