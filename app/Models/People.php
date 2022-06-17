@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\PersonCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,6 @@ class People extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
-        'type' => PeopleType::class,
     ];
 
     protected $fillable = [
@@ -24,6 +24,17 @@ class People extends Model
         'full_name',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($person) {
+            event(new PersonCreated($person));
+        });
+    }
+    public function type()
+    {
+        return $this->hasOne(PeopleType::class, 'id', 'people_type_id');
+    }
+
     public function reportsTo()
     {
         return $this->belongsTo(People::class, 'reports_to');
@@ -32,6 +43,11 @@ class People extends Model
     public function reportees()
     {
         return $this->hasMany(People::class, 'reports_to');
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class)->using(PeopleTask::class);
     }
 
     public function scopeCurrent($query)

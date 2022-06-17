@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\PeopleType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,6 +16,7 @@ class UnitController extends Controller
         return view('units.index', [
             'units' => Unit::with(['owner', 'emails', 'tasks'])->orderBy('name')->get(),
             'users' => User::orderBy('surname')->get(),
+            'peopleTypes' => PeopleType::orderBy('name')->get(),
         ]);
     }
 
@@ -64,16 +66,21 @@ class UnitController extends Controller
         ]);
 
         foreach ($unit->tasks as $task) {
-            Validator::make([
+            $data = [
                 'description' => $request->input('description.' . $task->id),
                 'is_optional' => $request->input('is_optional.' . $task->id),
                 'is_onboarding' => $request->input('is_onboarding.' . $task->id),
                 'is_active' => $request->input('is_active.' . $task->id),
-            ], [
+            ];
+            if ($request->filled('applies_to.' . $task->id)) {
+                $data['applies_to'] = $request->input('applies_to.' . $task->id);
+            }
+            Validator::make($data, [
                 'description' => 'required|string',
                 'is_optional' => 'required|boolean',
                 'is_onboarding' => 'required|boolean',
                 'is_active' => 'required|boolean',
+                'applies_to' => 'sometimes|required|array',
             ])->validate();
         }
 
@@ -97,6 +104,8 @@ class UnitController extends Controller
                 'is_onboarding' => $request->input('is_onboarding.' . $task->id),
                 'is_active' => $request->input('is_active.' . $task->id),
             ]);
+            $appliesTo = is_array($request->input('applies_to.' . $task->id)) ? $request->input('applies_to.' . $task->id) : [];
+            $task->peopleTypes()->sync($appliesTo);
         }
 
         if ($request->input('description.new') && $request->input('description.new') !== '') {

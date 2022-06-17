@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Task extends Model
 {
@@ -20,6 +21,11 @@ class Task extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function peopleTypes()
+    {
+        return $this->belongsToMany(PeopleType::class);
     }
 
     public static function makeDefault(array $overrides = []): static
@@ -61,5 +67,10 @@ class Task extends Model
     public function isntActive(): bool
     {
         return ! $this->isActive();
+    }
+
+    public function appliesTo(PeopleType $type): bool
+    {
+        return $this->peopleTypes->contains($type);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class TaskFactory extends Factory
             'is_active' => true,
             'is_optional' => false,
             'is_onboarding' => true,
+            'unit_id' => Unit::factory(),
         ];
     }
 

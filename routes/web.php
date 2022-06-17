@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'show'])->name('home');
 
+Route::post('/person/{person}/task', [\App\Http\Controllers\PersonTaskController::class, 'update'])->name('person.task.update');
 Route::get('/admin/units', [\App\Http\Controllers\UnitController::class, 'index'])->name('units.index');
 Route::post('/admin/units/{unit}', [\App\Http\Controllers\UnitController::class, 'update'])->name('unit.update');
 Route::post('/admin/units', [\App\Http\Controllers\UnitController::class, 'store'])->name('unit.store');

@@ -1,36 +1,26 @@
             <tr>
                 <td>
-                    <div class="field">
+                    <div class="field has-addons">
                         <div class="control">
-                        <input class="input" type="text" name="description[{{ $task->id }}]" value="{{ $task->description }}" placeholder="New task...">
+                            <button class="button is-static">{{ $task->id }}</button>
+                        </div>
+                        <div class="control is-expanded">
+                            <input class="input is-expeanded" type="text" name="description[{{ $task->id }}]" value="{{ $task->description }}" placeholder="New task...">
                         </div>
                     </div>
                 </td>
                 <td>
                     <div class="field">
                         <div class="control">
-                          <label class="checkbox">
-                            <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="1">
-                            Academics
-                          </label>
-                          <label class="checkbox">
-                            <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="2">
-                            Phds
-                          </label>
-                          <br />
-                          <label class="checkbox">
-                            <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="3">
-                            PDRAs
-                          </label>
-                          <label class="checkbox">
-                            <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="4">
-                            MPAs
-                          </label>
-                          <br />
-                          <label class="checkbox">
-                            <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="5">
-                            Technical
-                          </label>
+                          @foreach ($peopleTypes->chunk(2) as $chunkedTypes)
+                            @foreach ($chunkedTypes as $peopleType)
+                                <label class="checkbox">
+                                    <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="{{ $peopleType->id }}">
+                                    {{ $peopleType->name }}
+                                </label>
+                            @endforeach
+                            <br />
+                          @endforeach
                         </div>
                       </div>
                 </td>

@@ -22,6 +22,14 @@ class TestDataSeeder extends Seeder
     {
         $this->command->info('Seeding test data...');
 
+        collect([
+            PeopleType::ACADEMIC,
+            PeopleType::PHD,
+            PeopleType::PDRA,
+            PeopleType::MPA,
+            PeopleType::TECHNICAL
+        ])->each(fn ($type) => PeopleType::factory()->create(['name' => $type]));
+
         $admin = User::factory()->create([
             'username' => 'admin',
             'password' => bcrypt('secret'),
@@ -34,7 +42,8 @@ class TestDataSeeder extends Seeder
         foreach (range(1, rand(10, 20)) as $count) {
             People::factory()->leavingSoon()->create();
         }
-        People::where('type', '=', PeopleType::ACADEMIC)->get()->each(function ($person) {
+        $academicId = PeopleType::where('name', '=', PeopleType::ACADEMIC)->firstOrCreate(['name' => PeopleType::ACADEMIC])->id;
+        People::where('people_type_id', '=', $academicId)->get()->each(function ($person) {
             foreach (range(1, rand(5, 15)) as $i) {
                 People::inRandomOrder()->first()->update(['reports_to' => $person->id]);
             }

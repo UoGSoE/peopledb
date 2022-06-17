@@ -26,7 +26,7 @@ class PeopleFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'start_at' => now()->subWeeks(rand(10, 20)),
             'end_at' => now()->addYears(rand(1, 3)),
-            'type' => collect(PeopleType::values())->random(),
+            'people_type_id' => PeopleType::inRandomOrder()->first()?->id ?? PeopleType::factory(),
             'group' => collect(['Civil', 'Bio', 'Nano', 'Aero', 'Mech'])->random(),
         ];
     }

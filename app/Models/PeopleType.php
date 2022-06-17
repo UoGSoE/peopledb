@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use ArchTech\Enums\Values;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-enum PeopleType: string
+class PeopleType extends Model
 {
-    use Values;
+    use HasFactory;
 
-    case ACADEMIC = 'Academic';
-    case PHD_STUDENT = 'PhD Student';
-    case RA = 'RA';
-    case TECHNICIAN = 'Technician';
-    case MPA = 'MPA';
+    public const ACADEMIC = 'Academic';
+    public const PHD = 'PhD';
+    public const PDRA = 'PDRA';
+    public const MPA = 'MPA';
+    public const TECHNICAL = 'Technical';
 }

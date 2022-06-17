@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\PeopleType;
 use App\Models\Task;
 use Tests\TestCase;
 use App\Models\Unit;
@@ -12,6 +13,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class UnitsTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $academicType;
+    protected $phdType;
+    protected $pdraType;
+    protected $mpaType;
+    protected $technicalType;
 
     /** @test */
     public function we_can_see_the_existing_organisation_units()
@@ -34,6 +41,7 @@ class UnitsTest extends TestCase
     /** @test */
     public function we_can_edit_an_existing_unit_and_its_set_of_tasks()
     {
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $unit1 = Unit::factory()->create();
@@ -63,6 +71,10 @@ class UnitsTest extends TestCase
                 $task1->id => true,
                 $task2->id => false,
             ],
+            'applies_to' => [
+                $task1->id => [$this->academicType->id, $this->phdType->id],
+                $task2->id => [$this->mpaType->id, $this->pdraType->id],
+            ],
         ]);
 
         $response->assertRedirect(route('units.index'));
@@ -79,6 +91,9 @@ class UnitsTest extends TestCase
             $this->assertTrue($task->isOptional());
             $this->assertTrue($task->isOnboarding());
             $this->assertTrue($task->isActive());
+            $this->assertEquals(2, $task->peopleTypes()->count());
+            $this->assertTrue($task->peopleTypes->contains($this->academicType));
+            $this->assertTrue($task->peopleTypes->contains($this->phdType));
         });
     }
 
@@ -86,6 +101,7 @@ class UnitsTest extends TestCase
     public function we_can_supply_notification_email_addresses_for_the_unit()
     {
         $this->withoutExceptionHandling();
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
         $unit1 = Unit::factory()->create();
         $unit2 = Unit::factory()->create();
@@ -95,9 +111,9 @@ class UnitsTest extends TestCase
         $task4 = $unit2->tasks()->save(Task::factory()->make());
 
         $response = $this->actingAs($user)->post(route('unit.update', $unit1->id), [
-            'emails' => [
-                $unit1->id => 'fred@example.com, ginger@example.com',
-            ],
+            'name' => 'New name',
+            'owner_id' => $user->id,
+            'emails' => 'fred@example.com, ginger@example.com',
             'description' => [
                 $task1->id => 'New description for task 1',
                 $task2->id => 'New description for task 2',
@@ -133,6 +149,7 @@ class UnitsTest extends TestCase
     /** @test */
     public function we_can_add_a_new_tesk_to_a_unit()
     {
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
         $unit1 = Unit::factory()->create();
         $unit2 = Unit::factory()->create();
@@ -142,9 +159,9 @@ class UnitsTest extends TestCase
         $task4 = $unit2->tasks()->save(Task::factory()->make());
 
         $response = $this->actingAs($user)->post(route('unit.update', $unit1->id), [
-            'emails' => [
-                $unit1->id => 'fred@example.com',
-            ],
+            'emails' => 'fred@example.com',
+            'name' => 'New name',
+            'owner_id' => $user->id,
             'description' => [
                 $task1->id => 'New description for task 1',
                 $task2->id => 'New description for task 2',
@@ -185,6 +202,7 @@ class UnitsTest extends TestCase
     /** @test */
     public function we_can_create_a_new_unit()
     {
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post(route('unit.store'), [
