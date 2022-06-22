@@ -11,11 +11,12 @@ class DailyStatsRecorder
     public function record()
     {
         $dailyStat = DailyStat::firstOrNew(['date' => now()]);
-        $dailyStat->total_count = People::current()->count();
-        $dailyStat->academics_count = People::current()->where('type', '=', PeopleType::ACADEMIC)->count();
-        $dailyStat->phd_students_count = People::current()->where('type', '=', PeopleType::PHD_STUDENT)->count();
-        $dailyStat->mpas_count = People::current()->where('type', '=', PeopleType::MPA)->count();
-        $dailyStat->technicians_count = People::current()->where('type', '=', PeopleType::TECHNICIAN)->count();
+        $people = People::current()->with('type')->get();
+        $dailyStat->total_count = $people->count();
+        $dailyStat->academics_count = $people->filter(fn ($person) => $person->type?->name == PeopleType::ACADEMIC)->count();
+        $dailyStat->phd_students_count = $people->filter(fn ($person) => $person->type?->name == PeopleType::PHD)->count();
+        $dailyStat->mpas_count = $people->filter(fn ($person) => $person->type?->name == PeopleType::MPA)->count();
+        $dailyStat->technicians_count = $people->filter(fn ($person) => $person->type?->name == PeopleType::TECHNICAL)->count();
         $dailyStat->save();
     }
 }

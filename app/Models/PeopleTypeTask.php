@@ -12,4 +12,9 @@ class PeopleTypeTask extends Model
     use HasFactory;
 
     protected $table = 'people_type_task';
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

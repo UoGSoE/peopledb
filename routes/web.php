@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// auth()->loginUsingId(1);
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'show'])->name('home');
 
 Route::post('/person/{person}/task', [\App\Http\Controllers\PersonTaskController::class, 'update'])->name('person.task.update');

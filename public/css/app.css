@@ -11808,5 +11808,37 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem;
 }
+#successbox {
+    position: absolute;
+    top: 80px;
+    right: 30px;
+    -webkit-animation: fadeOut 1s;
+            animation: fadeOut 1s;
+    -webkit-animation-delay: 2s;
+            animation-delay: 2s;
+    -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+}
 
+@-webkit-keyframes fadeOut {
+    0% {
+       opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+       opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 

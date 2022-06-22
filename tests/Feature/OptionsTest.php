@@ -26,6 +26,7 @@ class OptionsTest extends TestCase
     /** @test */
     public function users_can_change_the_options()
     {
+        $this->withoutExceptionHandling();
         $user = User::factory()->create();
 
         SiteOption::create([
@@ -46,7 +47,7 @@ class OptionsTest extends TestCase
         $response = $this->actingAs($user)->post(route('options.update'), [
                 'recent_days_arriving' => '99',
                 'recent_days_leaving' => '88',
-                'arrivals_departures_recipients' => 'fred@example.com, ginger@example.com, sdfsdf',
+                'arrivals_departures_recipients' => 'fred@example.com, ginger@example.com',
         ]);
 
         $response->assertRedirect(route('options.edit'));

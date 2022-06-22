@@ -73,4 +73,16 @@ class Task extends Model
     {
         return $this->peopleTypes->contains($type);
     }
+
+    public function getCssClassTagColourAttribute(): string
+    {
+        return match ($this->unit->name) {
+            'IT' => 'is-danger',
+            'Facilities' => 'is-warning',
+            'Teaching' => 'is-info',
+            'Research Office' => 'is-link',
+            'School Admin' => 'is-primary',
+            default => '',
+        };
+    }
 }

@@ -35,6 +35,13 @@ class TestDataSeeder extends Seeder
             'password' => bcrypt('secret'),
         ]);
 
+        collect(['IT', 'Facilities', 'Teaching', 'Research Office', 'School Admin'])->each(fn ($name) => Unit::factory()->create([
+            'name' => $name,
+            'owner_id' => $admin->id,
+        ]));
+        Unit::get()->each(fn ($unit) => $unit->tasks()->saveMany(Task::factory()->times(rand(1, 10))->make()));
+        Unit::get()->each(fn ($unit) => $unit->emails()->saveMany(UnitEmail::factory()->times(rand(1, 3))->make()));
+
         $regularPeople = People::factory()->times(1000)->create();
         foreach (range(1, rand(10, 20)) as $count) {
             People::factory()->arrivingSoon()->create();
@@ -49,11 +56,6 @@ class TestDataSeeder extends Seeder
             }
         });
 
-        collect(['IT', 'Facilities', 'Teaching', 'Research Office', 'School Admin'])->each(fn ($name) => Unit::factory()->create([
-            'name' => $name,
-            'owner_id' => $admin->id,
-        ]));
-        Unit::get()->each(fn ($unit) => $unit->tasks()->saveMany(Task::factory()->times(rand(1, 10))->make()));
-        Unit::get()->each(fn ($unit) => $unit->emails()->saveMany(UnitEmail::factory()->times(rand(1, 3))->make()));
+        People::get()->each(fn ($person) => $person->tasks()->sync(Task::inRandomOrder()->take(5)->get()->pluck('id')));
     }
 }

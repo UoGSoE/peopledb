@@ -46,7 +46,7 @@
                 <div class="buttons">
                     <form method="POST" action="/logout">
                         @csrf
-                        <button class="button is-dark">Log Out {{ auth()->user()->full_name }}</button>
+                        <button class="button is-dark is-small has-text-weight-semibold">Log Out {{ auth()->user()->full_name }}</button>
                     </form>
                 </div>
             </div>

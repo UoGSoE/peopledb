@@ -15,6 +15,8 @@ class HomepageTest extends TestCase
     /** @test */
     public function the_homepage_shows_a_list_of_recent_arrivals_and_arriving_soon_and_also_people_leaving_and_left_recently()
     {
+        $this->withoutExceptionHandling();
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
         $arrivedRecentlyPerson = People::factory()->create(['start_at' => now()->subDays(1)]);
         $arrivingSoonPerson = People::factory()->create(['start_at' => now()->addDays(1)]);

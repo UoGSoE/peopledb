@@ -25,7 +25,7 @@
                             <select wire:model="filterType">
                             <option value=""></option>
                             @foreach ($possibleTypes as $type)
-                                <option value="{{ $type->value }}">{{ $type->value }}</option>
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
                             @endforeach
                             </select>
                         </div>
@@ -161,7 +161,7 @@
                     <td>
                         <a href="mailto:{{ $person->email }}">{{ $person->email }}</a>
                     </td>
-                    <td>{{ $person->type->value }}</td>
+                    <td>{{ $person->type?->name }}</td>
                     <td>{{ $person->group }}</td>
                     <td>{{ $person->start_at?->format('d/m/Y') }}</td>
                     <td>{{ $person->end_at?->format('d/m/Y') }}</td>

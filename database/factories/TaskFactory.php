@@ -26,6 +26,15 @@ class TaskFactory extends Factory
         ];
     }
 
+    public function onboarding()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_onboarding' => true,
+            ];
+        });
+    }
+
     public function leaving()
     {
         return $this->state(function (array $attributes) {

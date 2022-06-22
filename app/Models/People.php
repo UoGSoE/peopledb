@@ -47,7 +47,7 @@ class People extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class)->using(PeopleTask::class);
+        return $this->belongsToMany(Task::class)->using(PeopleTask::class)->withPivot(['completed_at', 'completed_by', 'notes']);
     }
 
     public function scopeCurrent($query)
@@ -55,9 +55,12 @@ class People extends Model
         return $query->where('end_at', '>=', now())->where('start_at', '<=', now());
     }
 
-    public function scopeType($query, string $type)
+    public function scopePeopleType($query, string|int $type)
     {
-        return $query->where('type', '=', $type);
+        if (! is_numeric($type)) {
+            $type = PeopleType::whereName($type)->firstOrFail()->id;
+        }
+        return $query->where('people_type_id', '=', $type);
     }
 
     public function scopeGroup($query, string $group)
@@ -121,5 +124,15 @@ class People extends Model
             $recentlyArrived,
             $recentlyLeft,
         );
+    }
+
+    public function hasLeavingTasks(): bool
+    {
+        return $this->tasks->contains(fn ($task) => $task->isLeaving());
+    }
+
+    public function doesntHaveLeavingTasks(): bool
+    {
+        return ! $this->hasLeavingTasks();
     }
 }

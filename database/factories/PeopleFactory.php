@@ -48,4 +48,40 @@ class PeopleFactory extends Factory
             ];
         });
     }
+
+    public function phd()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'people_type_id' => PeopleType::firstOrCreate(['name' => PeopleType::PHD]),
+            ];
+        });
+    }
+
+    public function academic()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'people_type_id' => PeopleType::firstOrCreate(['name' => PeopleType::ACADEMIC]),
+            ];
+        });
+    }
+
+    public function mpa()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'people_type_id' => PeopleType::firstOrCreate(['name' => PeopleType::MPA]),
+            ];
+        });
+    }
+
+    public function technical()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'people_type_id' => PeopleType::firstOrCreate(['name' => PeopleType::TECHNICAL]),
+            ];
+        });
+    }
 }

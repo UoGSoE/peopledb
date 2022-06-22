@@ -19,7 +19,8 @@ class AllocateAppropriateTasksToNewPerson implements ShouldQueue
     public function handle($event)
     {
         $person = $event->person;
-        $applicableTasks = PeopleTypeTask::where('people_type_id', $person->people_type_id)->get();
-        $person->tasks()->sync($applicableTasks->pluck('task_id'));
+        $applicableTasks = PeopleTypeTask::where('people_type_id', $person->people_type_id)->get()->pluck('task_id');
+        $onboardingTasks = Task::findMany($applicableTasks)->filter(fn ($task) => $task->isOnboarding())->pluck('id');
+        $person->tasks()->sync($onboardingTasks);
     }
 }

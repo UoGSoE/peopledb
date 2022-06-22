@@ -21,6 +21,7 @@ return new class () extends Migration {
             $table->dateTime('completed_at')->nullable();
             $table->unsignedBigInteger('completed_by')->nullable();
             $table->foreign('completed_by')->references('id')->on('users')->onDelete('set null');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

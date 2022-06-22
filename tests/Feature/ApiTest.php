@@ -64,12 +64,13 @@ class ApiTest extends TestCase
     /** @test */
     public function we_can_filter_the_people_by_type()
     {
-        $currentPerson1 = People::factory()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10), 'type' => PeopleType::ACADEMIC]);
-        $currentPerson2 = People::factory()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10), 'type' => PeopleType::PHD_STUDENT]);
-        $leftAgesAgoPerson = People::factory()->create(['start_at' => now()->subYears(5), 'end_at' => now()->subYears(3), 'type' => PeopleType::ACADEMIC]);
-        $notArrivedYetPerson = People::factory()->create(['start_at' => now()->addDays(10), 'end_at' => now()->addDays(20), 'type' => PeopleType::MPA]);
+        $this->setUpPeopleTypes();
+        $currentPerson1 = People::factory()->academic()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10)]);
+        $currentPerson2 = People::factory()->phd()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10)]);
+        $leftAgesAgoPerson = People::factory()->academic()->create(['start_at' => now()->subYears(5), 'end_at' => now()->subYears(3)]);
+        $notArrivedYetPerson = People::factory()->mpa()->create(['start_at' => now()->addDays(10), 'end_at' => now()->addDays(20)]);
 
-        $response = $this->getJson(route('api.people.index') . '?filter[current]=1&filter[type]=Academic');
+        $response = $this->getJson(route('api.people.index') . '?filter[current]=1&filter[peopleType]=' . PeopleType::ACADEMIC);
 
         $response->assertOk();
         $response->assertJsonCount(1, 'data');
@@ -89,6 +90,7 @@ class ApiTest extends TestCase
     /** @test */
     public function we_can_filter_the_people_by_group()
     {
+        $this->setUpPeopleTypes();
         $currentPerson1 = People::factory()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10), 'group' => 'xyz']);
         $currentPerson2 = People::factory()->create(['start_at' => now()->subDays(10), 'end_at' => now()->addDays(10), 'group' => 'abc']);
         $leftAgesAgoPerson = People::factory()->create(['start_at' => now()->subYears(5), 'end_at' => now()->subYears(3), 'group' => '123']);

@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\PersonCreated;
+use App\Events\PersonIsLeaving;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\AllocateAppropriateTasksToNewPerson;
+use App\Listeners\AllocateAppropriateTasksToLeavingPerson;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -22,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         PersonCreated::class => [
             AllocateAppropriateTasksToNewPerson::class,
-        ]
+        ],
+        PersonIsLeaving::class => [
+            AllocateAppropriateTasksToLeavingPerson::class,
+        ],
     ];
 
     /**

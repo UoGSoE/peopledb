@@ -1,1 +1,22 @@
+#successbox {
+    position: absolute;
+    top: 80px;
+    right: 30px;
+    animation: fadeOut 1s;
+    animation-delay: 2s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+       opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
 @import 'bulma/css/bulma.css'

@@ -29,15 +29,16 @@ class PeopleReportTest extends TestCase
     public function the_report_has_the_right_data_and_can_be_filtered_in_various_ways()
     {
         // this is a long, long test.  sorry future me/whoever.
+        $this->setUpPeopleTypes();
         $user = User::factory()->create();
-        $supervisor = People::factory()->create(['reports_to' => null, 'type' => PeopleType::ACADEMIC, 'group' => 'Default']);
-        $currentPhd1 = People::factory()->create(['reports_to' => $supervisor->id, 'type' => PeopleType::PHD_STUDENT, 'group' => 'Default', 'surname' => 'afairlyuniquesurname']);
-        $currentMpa1 = People::factory()->create(['reports_to' => null, 'type' => PeopleType::MPA, 'group' => 'Non Default']);
-        $currentPhd2 = People::factory()->create(['reports_to' => $supervisor->id, 'type' => PeopleType::PHD_STUDENT, 'group' => 'Default']);
-        $leftMpa = People::factory()->create(['end_at' => now()->subDays(10), 'type' => PeopleType::MPA, 'group' => 'Default']);
-        $leavingPhd = People::factory()->create(['end_at' => now()->addDays(10), 'type' => PeopleType::PHD_STUDENT, 'group' => 'Non Default']);
-        $arrivedPhd = People::factory()->create(['start_at' => now()->subDays(10), 'type' => PeopleType::PHD_STUDENT, 'group' => 'Default']);
-        $arrivingPhd = People::factory()->create(['reports_to' => null, 'start_at' => now()->addDays(10), 'type' => PeopleType::PHD_STUDENT, 'group' => 'Default']);
+        $supervisor = People::factory()->academic()->create(['reports_to' => null, 'group' => 'Default']);
+        $currentPhd1 = People::factory()->phd()->create(['reports_to' => $supervisor->id, 'group' => 'Default', 'surname' => 'afairlyuniquesurname']);
+        $currentMpa1 = People::factory()->mpa()->create(['reports_to' => null, 'group' => 'Non Default']);
+        $currentPhd2 = People::factory()->phd()->create(['reports_to' => $supervisor->id, 'group' => 'Default']);
+        $leftMpa = People::factory()->mpa()->create(['end_at' => now()->subDays(10), 'group' => 'Default']);
+        $leavingPhd = People::factory()->phd()->create(['end_at' => now()->addDays(10), 'group' => 'Non Default']);
+        $arrivedPhd = People::factory()->phd()->create(['start_at' => now()->subDays(10), 'group' => 'Default']);
+        $arrivingPhd = People::factory()->phd()->create(['reports_to' => null, 'start_at' => now()->addDays(10), 'group' => 'Default']);
 
         Livewire::actingAs($user)->test('people-report')
             ->assertSee($currentPhd1->full_name)
@@ -49,7 +50,7 @@ class PeopleReportTest extends TestCase
             ->assertSee($arrivingPhd->full_name)
             ->assertSee($supervisor->full_name)
             // filter by user type
-            ->set('filterType', PeopleType::PHD_STUDENT->value)
+            ->set('filterType', $this->phdType->id)
             ->assertSee($currentPhd1->full_name)
             ->assertDontSee($currentMpa1->full_name)
             ->assertSee($currentPhd2->full_name)

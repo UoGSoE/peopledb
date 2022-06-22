@@ -25,7 +25,7 @@
 
         <section class="section" id="app">
             @if (session()->has('success'))
-                <div class="success-box shadow-lg notification is-success">
+                <div id="successbox" class="success-box shadow-lg notification is-success is-pulled-right" style="z-index: 10;">
                     {{ session('success') }}
                 </div>
             @endif

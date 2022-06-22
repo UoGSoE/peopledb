@@ -68,12 +68,12 @@ class PeopleReport extends Component
 
     protected function getFilteredPeople()
     {
-        $this->possibleTypes = PeopleType::cases();
+        $this->possibleTypes = PeopleType::orderBy('name')->get();
         $this->possibleGroups = People::select('group')->distinct()->get()->pluck('group');
         $this->possibleReportsTo = People::whereHas('reportees')->orderBy('surname')->get();
-        return People::orderByDesc('start_at')->with('reportsTo')
+        return People::orderByDesc('start_at')->with(['reportsTo', 'type'])
             ->when($this->filterType, function ($query) {
-                return $query->where('type', $this->filterType);
+                return $query->where('people_type_id', $this->filterType);
             })
             ->when($this->filterReportsTo, function ($query) {
                 return $query->where('reports_to', $this->filterReportsTo);
@@ -117,7 +117,7 @@ class PeopleReport extends Component
                 $person->email,
                 $person->start_at?->format('d/m/Y') ?? '',
                 $person->end_at?->format('d/m/Y') ?? '',
-                $person->type->value ?? '',
+                $person->type->name ?? '',
                 $person->group ?? '',
                 $person->reportsTo?->full_name ?? '',
                 $person->reportsTo?->email ?? '',

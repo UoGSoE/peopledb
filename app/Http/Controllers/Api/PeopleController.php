@@ -15,7 +15,7 @@ class PeopleController extends Controller
         $people = QueryBuilder::for(People::class)
             ->allowedFilters([
                 AllowedFilter::scope('current'),
-                AllowedFilter::scope('type'),
+                AllowedFilter::scope('peopleType'),
                 AllowedFilter::scope('group'),
                 AllowedFilter::callback('start_after', fn ($query, $value) => $query->where('start_at', '>=', $value)),
                 AllowedFilter::callback('end_before', fn ($query, $value) => $query->where('end_at', '<=', $value)),
