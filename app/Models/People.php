@@ -47,7 +47,7 @@ class People extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class)->using(PeopleTask::class)->withPivot(['completed_at', 'completed_by', 'notes']);
+        return $this->belongsToMany(Task::class)->using(PeopleTask::class)->withPivot(['completed_at', 'completed_by', 'notes'])->withTimestamps();
     }
 
     public function scopeCurrent($query)

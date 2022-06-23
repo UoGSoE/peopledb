@@ -39,7 +39,7 @@ class TestDataSeeder extends Seeder
             'name' => $name,
             'owner_id' => $admin->id,
         ]));
-        Unit::get()->each(fn ($unit) => $unit->tasks()->saveMany(Task::factory()->times(rand(1, 10))->make()));
+        Unit::get()->each(fn ($unit) => $unit->tasks()->saveMany(Task::factory()->times(rand(1, 10))->make(['unit_id' => $unit->id])));
         Unit::get()->each(fn ($unit) => $unit->emails()->saveMany(UnitEmail::factory()->times(rand(1, 3))->make()));
 
         $regularPeople = People::factory()->times(1000)->create();

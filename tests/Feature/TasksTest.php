@@ -95,7 +95,6 @@ class TasksTest extends TestCase
     /** @test */
     public function a_persons_tasks_can_be_unsigned_off_by_users()
     {
-        $this->fail('TODO');
         $user = User::factory()->create();
         $task1 = Task::factory()->create();
         $task2 = Task::factory()->create();
@@ -104,20 +103,24 @@ class TasksTest extends TestCase
         $person2 = People::factory()->create();
         $person1->tasks()->sync([$task1->id, $task3->id]);
         $person2->tasks()->sync([$task2->id]);
+        $person1->tasks()->wherePivot('task_id', $task1->id)->first()->pivot->update([
+            'completed_by' => $user->id,
+            'completed_at' => now(),
+        ]);
 
         $response = $this->actingAs($user)->post(route('person.task.update', $person1), [
             'task_id' => $task1->id,
             'task_notes' => 'hello',
-            'task_completed_at' => now()->format('Y-m-d'),
+            'task_completed_at' => "",
         ]);
 
         $response->assertRedirect(route('people.show', $person1->id));
         $response->assertSessionDoesntHaveErrors();
         $this->assertEquals(2, $person1->tasks()->count());
         $personTask = $person1->tasks()->wherePivot('task_id', '=', $task1->id)->firstOrFail()->pivot;
-        $this->assertEquals(now()->format('Y-m-d'), $personTask->completed_at->format('Y-m-d'));
+        $this->assertNull($personTask->completed_at);
         $this->assertEquals('hello', $personTask->notes);
-        $this->assertTrue($personTask->completer->is($user));
+        $this->assertNull($personTask->completer);
     }
 
     /** @test */

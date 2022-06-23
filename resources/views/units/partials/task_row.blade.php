@@ -15,7 +15,7 @@
                           @foreach ($peopleTypes->chunk(2) as $chunkedTypes)
                             @foreach ($chunkedTypes as $peopleType)
                                 <label class="checkbox">
-                                    <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="{{ $peopleType->id }}">
+                                    <input type="checkbox" name="applies_to[{{ $task->id }}][]" value="{{ $peopleType->id }}" @checked($task->peopleTypes->contains($peopleType))>
                                     {{ $peopleType->name }}
                                 </label>
                             @endforeach

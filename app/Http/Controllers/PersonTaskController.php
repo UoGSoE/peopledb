@@ -22,6 +22,10 @@ class PersonTaskController extends Controller
             $personTask->completed_by = $request->user()->id;
         }
         $personTask->completed_at = $request->task_completed_at ? Carbon::createFromFormat('Y-m-d', $request->task_completed_at) : null;
+        if (! $request->task_completed_at) {
+            $personTask->completed_by = null;
+        }
+
         $personTask->save();
 
         return redirect(route('people.show', $person))->with('success', 'Task updated.');

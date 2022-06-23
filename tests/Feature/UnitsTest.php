@@ -165,22 +165,22 @@ class UnitsTest extends TestCase
             'description' => [
                 $task1->id => 'New description for task 1',
                 $task2->id => 'New description for task 2',
-                'new' => 'New task',
+                0 => 'New task',
             ],
             'is_optional' => [
                 $task1->id => true,
                 $task2->id => false,
-                'new' => false,
+                0 => false,
             ],
             'is_onboarding' => [
                 $task1->id => true,
                 $task2->id => false,
-                'new' => true,
+                0 => true,
             ],
             'is_active' => [
                 $task1->id => true,
                 $task2->id => false,
-                'new' => true,
+                0 => true,
             ],
         ]);
 
@@ -206,7 +206,7 @@ class UnitsTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post(route('unit.store'), [
-            'name' => 'New unit',
+            'new_unit_name' => 'New unit',
         ]);
 
         $response->assertRedirect(route('units.index'));

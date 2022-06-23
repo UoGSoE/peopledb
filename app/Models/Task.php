@@ -31,7 +31,7 @@ class Task extends Model
     public static function makeDefault(array $overrides = []): static
     {
         $defaults = [
-            'id' => 'new',
+            'id' => 0,
             'is_optional' => false,
             'is_onboarding' => true,
             'is_active' => true,

@@ -23,11 +23,11 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:units',
+            'new_unit_name' => 'required|string|max:255|unique:units,name',
         ]);
 
         Unit::create([
-            'name' => $request->name,
+            'name' => $request->new_unit_name,
             'owner_id' => $request->user()->id,
         ]);
 
@@ -105,15 +105,15 @@ class UnitController extends Controller
                 'is_active' => $request->input('is_active.' . $task->id),
             ]);
             $appliesTo = is_array($request->input('applies_to.' . $task->id)) ? $request->input('applies_to.' . $task->id) : [];
-            $task->peopleTypes()->sync($appliesTo);
+            $task->peopleTypes()->sync(array_values($appliesTo));
         }
 
-        if ($request->input('description.new') && $request->input('description.new') !== '') {
+        if ($request->filled('description.0')) {
             Validator::make([
-                'description' => $request->input('description.new'),
-                'is_optional' => $request->input('is_optional.new'),
-                'is_onboarding' => $request->input('is_onboarding.new'),
-                'is_active' => $request->input('is_active.new'),
+                'description' => $request->input('description.0'),
+                'is_optional' => $request->input('is_optional.0'),
+                'is_onboarding' => $request->input('is_onboarding.0'),
+                'is_active' => $request->input('is_active.0'),
             ], [
                 'description' => 'required|string',
                 'is_optional' => 'required|boolean',
@@ -121,12 +121,15 @@ class UnitController extends Controller
                 'is_active' => 'required|boolean',
             ])->validate();
 
-            $unit->tasks()->save(Task::make([
-                'description' => $request->input('description.new'),
-                'is_optional' => $request->input('is_optional.new'),
-                'is_onboarding' => $request->input('is_onboarding.new'),
-                'is_active' => $request->input('is_active.new'),
+            $newTask = $unit->tasks()->save(Task::make([
+                'description' => $request->input('description.0'),
+                'is_optional' => $request->input('is_optional.0'),
+                'is_onboarding' => $request->input('is_onboarding.0'),
+                'is_active' => $request->input('is_active.0'),
             ]));
+
+            $appliesTo = $request->input('applies_to.0') ? $request->input('applies_to.0') : [];
+            $newTask->peopleTypes()->sync(array_values($appliesTo));
         }
 
         return redirect(route('units.index'))->with('success', 'Unit/tasks updated.');

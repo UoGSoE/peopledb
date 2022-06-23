@@ -23,6 +23,21 @@ class PeopleTask extends Pivot
         return $this->belongsTo(User::class, 'completed_by');
     }
 
+    public function person()
+    {
+        return $this->belongsTo(People::class, 'people_id');
+    }
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
+
+    public function scopeIncomplete($query)
+    {
+        return $query->whereNull('completed_at');
+    }
+
     public function isComplete(): bool
     {
         return $this->completed_at !== null;

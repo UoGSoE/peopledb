@@ -23,6 +23,12 @@
                     <a class="navbar-item" href="{{ route('reports.people') }}">
                         People
                     </a>
+                    <a class="navbar-item" href="{{ route('reports.tasks.outstanding') }}">
+                        Outstanding Tasks By Person
+                    </a>
+                    <a class="navbar-item" href="{{ route('reports.tasks.outstanding_by_task') }}">
+                        Outstanding Tasks By Task
+                    </a>
                     <a class="navbar-item" href="{{ route('reports.stats') }}">
                         Stats/Trends
                     </a>
