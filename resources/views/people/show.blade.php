@@ -84,7 +84,7 @@
         </thead>
         <tbody>
             @foreach ($person->tasks as $task)
-                <tr>
+                <tr x-data="{ showNotesModal: false }">
                     <td>
                         <span class="tag has-text-weight-semibold {{ $task->css_class_tag_colour }}">{{ $task->unit->name }}</span>
                     </td>
@@ -98,7 +98,12 @@
                             <input type="hidden" name="task_id" value="{{ $task->pivot->task_id }}">
                             <div class="field has-addons">
                                 <div class="control is-small">
-                                    <input class="input is-small" name="task_completed_at" type="date" value="{{ $task->pivot->completed_at?->format('Y-m-d') }}" pattern="\d{4}-\d{2}-\d{2}" placeholder="Y-m-d">
+                                    <input @class([
+                                        'input',
+                                        'is-small',
+                                        'has-text-weight-semibold',
+                                        'has-background-warning' => is_null($task->pivot->completed_at) && !$task->is_optional,
+                                    ]) name="task_completed_at" type="date" value="{{ $task->pivot->completed_at?->format('Y-m-d') }}" pattern="\d{4}-\d{2}-\d{2}" placeholder="Y-m-d">
                                 </div>
                                 <div class="control is-small">
                                     <button type="submit" class="button is-small">Update</button>
@@ -107,7 +112,42 @@
                         </form>
                     </td>
                     <td>{{ $task->pivot->completer?->full_name }}</td>
-                    <td>{{ $task->pivot->notes }}</td>
+                    <td>
+                        <button @click="showNotesModal = true" @class([
+                            'button',
+                            'is-small',
+                            'is-info' => $task->pivot->notes != '',
+                        ])>✏️</button>
+                        <!-- modal start -->
+                        <div class="modal" :class="showNotesModal ? 'is-active' : ''">
+                            <div class="modal-background"></div>
+                            <form x-ref="notesform" action="{{ route('person.task.update', $person) }}" method="post">
+                                @csrf
+                                <input type="hidden" name="task_id" value="{{ $task->pivot->task_id }}">
+                                <input type="hidden" name="task_completed_at" value="{{ $task->pivot->completed_at?->format('Y-m-d') }}">
+                                <input type="hidden" name="task_completed_by" value="{{ $task->pivot->completed_by }}">
+                                <div class="modal-card">
+                                <header class="modal-card-head">
+                                    <p class="modal-card-title">Notes</p>
+                                    <button @click.prevent="showNotesModal = false; $refs.notesform.reset()" class="delete" aria-label="close"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <textarea class="textarea" name="task_notes" id="notes-{{ $task->id }}" cols="30" rows="10">{{ $task->pivot->notes }}</textarea>
+                                        </div>
+                                    </div>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button type="submit" class="button is-success">Save changes</button>
+                                    <button @click.prevent="showNotesModal = false; $refs.notesform.reset()" class="button">Cancel</button>
+                                </footer>
+                                </div>
+                            </form>
+                          </div>
+                        </div>
+                        <!-- modal end -->
+                    </td>
                 </tr>
             @endforeach
         </tbody>

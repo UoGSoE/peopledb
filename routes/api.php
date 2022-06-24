@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('people', [\App\Http\Controllers\Api\PeopleController::class, 'index'])->name('api.people.index');
+Route::post('task/complete', [\App\Http\Controllers\Api\TaskCompleteController::class, 'update'])->name('api.task.complete');

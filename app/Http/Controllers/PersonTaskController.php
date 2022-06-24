@@ -12,12 +12,14 @@ class PersonTaskController extends Controller
     {
         $request->validate([
             'task_id' => 'required|integer',
-            'task_notes' => 'nullable|string|max:200',
+            'task_notes' => 'sometimes|string|max:500',
             'task_completed_at' => 'nullable|date_format:Y-m-d',
         ]);
 
         $personTask = $person->tasks()->wherePivot('task_id', '=', $request->task_id)->firstOrFail()->pivot;
-        $personTask->notes = $request->task_notes;
+        if ($request->filled('task_notes')) {
+            $personTask->notes = $request->task_notes;
+        }
         if ($personTask->isntComplete() && $request->task_completed_at) {
             $personTask->completed_by = $request->user()->id;
         }

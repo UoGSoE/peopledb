@@ -3,7 +3,7 @@
 @section('content')
 
 <h3 class="title is-3">
-    Outstanding Tasks By Task
+    Outstanding Tasks <span class="has-text-grey is-size-4">(By Task)</span>
 </h3>
 
 <table class="table is-fullwidth is-striped is-hoverable">

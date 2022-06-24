@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\People;
 use App\Models\PeopleType;
+use App\Models\Task;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -353,6 +354,127 @@ class ApiTest extends TestCase
                     'end_at' => $leftAgesAgoPerson->end_at->toJson(),
                 ],
             ],
+        ]);
+    }
+
+    /** @test */
+    public function we_can_mark_a_given_task_for_a_given_person_as_complete()
+    {
+        $user = User::factory()->create();
+        $person = People::factory()->create();
+        $otherPerson = People::factory()->create();
+        $task1 = Task::factory()->create();
+        $task2 = Task::factory()->create();
+        $person->tasks()->sync([$task1->id, $task2->id]);
+        $otherPerson->tasks()->sync([$task1->id, $task2->id]);
+
+        $this->freezeTime();
+
+        $response = $this->postJson(route('api.task.complete'), [
+            'task_id' => $task1->id,
+            'person_guid' => $person->username,
+            'completer_guid' => $user->username,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'message' => 'Task marked as complete',
+            'data' => [
+            ],
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task1->id,
+            'people_id' => $person->id,
+            'completed_at' => now()->format('Y-m-d H:i:s'),
+            'completed_by' => $user->id,
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task2->id,
+            'people_id' => $person->id,
+            'completed_at' => null,
+            'completed_by' => null,
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task1->id,
+            'people_id' => $otherPerson->id,
+            'completed_at' => null,
+            'completed_by' => null,
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task2->id,
+            'people_id' => $otherPerson->id,
+            'completed_at' => null,
+            'completed_by' => null,
+        ]);
+    }
+
+    /** @test */
+    public function we_can_mark_a_given_task_for_a_given_person_as_complete_with_optional_notes()
+    {
+        $user = User::factory()->create();
+        $person = People::factory()->create();
+        $otherPerson = People::factory()->create();
+        $task1 = Task::factory()->create();
+        $task2 = Task::factory()->create();
+        $person->tasks()->sync([$task1->id, $task2->id]);
+        $otherPerson->tasks()->sync([$task1->id, $task2->id]);
+
+        $this->freezeTime();
+
+        $response = $this->postJson(route('api.task.complete'), [
+            'task_id' => $task1->id,
+            'person_guid' => $person->username,
+            'completer_guid' => $user->username,
+            'notes' => 'This is a note',
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'message' => 'Task marked as complete',
+            'data' => [
+            ],
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task1->id,
+            'people_id' => $person->id,
+            'completed_at' => now()->format('Y-m-d H:i:s'),
+            'completed_by' => $user->id,
+            'notes' => "This is a note\n",
+        ]);
+    }
+
+    /** @test */
+    public function if_notes_are_passed_we_prepend_them_to_any_existing_notes()
+    {
+        $user = User::factory()->create();
+        $person = People::factory()->create();
+        $otherPerson = People::factory()->create();
+        $task1 = Task::factory()->create();
+        $task2 = Task::factory()->create();
+        $person->tasks()->sync([$task1->id => ['notes' => 'Existing Note'], $task2->id]);
+        $otherPerson->tasks()->sync([$task1->id, $task2->id]);
+
+        $this->freezeTime();
+
+        $response = $this->postJson(route('api.task.complete'), [
+            'task_id' => $task1->id,
+            'person_guid' => $person->username,
+            'completer_guid' => $user->username,
+            'notes' => 'This is a new note',
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'message' => 'Task marked as complete',
+            'data' => [
+            ],
+        ]);
+        $this->assertDatabaseHas('people_task', [
+            'task_id' => $task1->id,
+            'people_id' => $person->id,
+            'completed_at' => now()->format('Y-m-d H:i:s'),
+            'completed_by' => $user->id,
+            'notes' => "This is a new note\nExisting Note",
         ]);
     }
 }

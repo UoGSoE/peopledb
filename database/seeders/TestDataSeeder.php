@@ -56,6 +56,6 @@ class TestDataSeeder extends Seeder
             }
         });
 
-        People::get()->each(fn ($person) => $person->tasks()->sync(Task::inRandomOrder()->take(5)->get()->pluck('id')));
+        People::get()->each(fn ($person) => $person->tasks()->sync(Task::inRandomOrder()->take(rand(1, 5))->get()->pluck('id')));
     }
 }

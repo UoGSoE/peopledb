@@ -14,7 +14,7 @@ class UnitController extends Controller
     public function index()
     {
         return view('units.index', [
-            'units' => Unit::with(['owner', 'emails', 'tasks'])->orderBy('name')->get(),
+            'units' => Unit::with(['owner', 'emails', 'tasks', 'tasks.peopleTypes'])->orderBy('name')->get(),
             'users' => User::orderBy('surname')->get(),
             'peopleTypes' => PeopleType::orderBy('name')->get(),
         ]);

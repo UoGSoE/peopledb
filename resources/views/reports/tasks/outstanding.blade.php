@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="title is-3">Outstanding Tasks By Person</h3>
+<h3 class="title is-3">Outstanding Tasks <span class="has-text-grey is-size-4">(By Person)</span></h3>
 
 <table class="table is-fullwidth is-striped is-hoverable">
     <thead>
@@ -15,8 +15,10 @@
         @foreach ($people as $person)
             <tr>
                 <td>
-                    <a href="{{ route('people.show', $person) }}">{{ $person->full_name }}</a>
-                    <span class="tag">{{ $person->type->name }}</span>
+                    <span class="is-size-4">
+                        <a href="{{ route('people.show', $person) }}">{{ $person->full_name }}</a>
+                        <span class="tag is-medium">{{ $person->type->name }}</span>
+                    </span>
                 </td>
                 <td>
                     @foreach ($person->tasks as $task)
