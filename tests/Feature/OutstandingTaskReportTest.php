@@ -16,6 +16,7 @@ class OutstandingTaskReportTest extends TestCase
     /** @test */
     public function users_can_see_the_outstanding_tasks_by_user_report_page()
     {
+        $this->fail('TODO: test we dont see people who have no outstanding tasks');
         $user = User::factory()->create();
         $person = People::factory()->create();
         $task1 = Task::factory()->create(['description' => 'This is task 1']);

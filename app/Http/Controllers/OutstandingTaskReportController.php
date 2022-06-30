@@ -11,8 +11,10 @@ class OutstandingTaskReportController extends Controller
     public function show()
     {
         return view('reports.tasks.outstanding', [
-            'people' => People::with([
-                'tasks' => fn ($query) => $query->whereNull('completed_at')->where('is_optional', '=', false),
+            'people' => People::whereHas(
+                'tasks',
+                fn ($query) => $query->whereNull('completed_at')->where('is_optional', '=', false)
+            )->with([
                 'tasks.unit',
                 'type',
             ])->orderBy('surname')->get(),

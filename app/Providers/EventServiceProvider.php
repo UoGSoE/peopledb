@@ -6,6 +6,7 @@ use App\Events\PersonCreated;
 use App\Events\PersonIsLeaving;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\NotifySupervisorAboutLeavingPerson;
 use App\Listeners\AllocateAppropriateTasksToNewPerson;
 use App\Listeners\AllocateAppropriateTasksToLeavingPerson;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -27,6 +28,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         PersonIsLeaving::class => [
             AllocateAppropriateTasksToLeavingPerson::class,
+            NotifySupervisorAboutLeavingPerson::class,
         ],
     ];
 

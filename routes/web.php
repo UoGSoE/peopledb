@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 // auth()->loginUsingId(1);
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'show'])->name('home');
 
+// Route::get('/ttt', function () {
+//     // test email
+//     event(new \App\Events\PersonIsLeaving(\App\Models\People::inRandomOrder()->first()));
+//     return 'hello';
+// });
+Route::get('/alter-leaving-date/{supervisee}/{supervisor}', [\App\Http\Controllers\AlterLeavingDateController::class, 'edit'])->name('supervisor.edit_leaving_date_supervisee');
+Route::post('/alter-leaving-date/{supervisee}/{supervisor}', [\App\Http\Controllers\AlterLeavingDateController::class, 'update'])->name('supervisor.update_leaving_date_supervisee');
+
 Route::post('/person/{person}/task', [\App\Http\Controllers\PersonTaskController::class, 'update'])->name('person.task.update');
 Route::get('/admin/units', [\App\Http\Controllers\UnitController::class, 'index'])->name('units.index');
 Route::post('/admin/units', [\App\Http\Controllers\UnitController::class, 'store'])->name('unit.store');
