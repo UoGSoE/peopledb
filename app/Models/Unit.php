@@ -40,4 +40,16 @@ class Unit extends Model
     {
         return $this->hasMany(Task::class)->where('is_onboarding', false);
     }
+
+    public function getCssClassTagColourAttribute(): string
+    {
+        return match ($this->name) {
+            'IT' => 'is-danger',
+            'Facilities' => 'is-warning',
+            'Teaching' => 'is-info',
+            'Research Office' => 'is-link',
+            'School Admin' => 'is-primary',
+            default => '',
+        };
+    }
 }

@@ -76,13 +76,6 @@ class Task extends Model
 
     public function getCssClassTagColourAttribute(): string
     {
-        return match ($this->unit->name) {
-            'IT' => 'is-danger',
-            'Facilities' => 'is-warning',
-            'Teaching' => 'is-info',
-            'Research Office' => 'is-link',
-            'School Admin' => 'is-primary',
-            default => '',
-        };
+        return $this->unit->css_class_tag_colour;
     }
 }
