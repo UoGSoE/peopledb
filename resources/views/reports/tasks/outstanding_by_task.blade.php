@@ -2,9 +2,22 @@
 
 @section('content')
 
-<h3 class="title is-3">
-    Outstanding Tasks <span class="has-text-grey is-size-4">(By Task)</span>
-</h3>
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <h3 class="title is-3">
+                Outstanding Tasks <span class="has-text-grey is-size-4">(By Task)</span>
+            </h3>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a class="button" href="{{ route('reports.tasks.outstanding_by_task.export') }}">
+                Export
+            </a>
+        </div>
+    </div>
+</div>
 @if (count($tasks) == 0)
     <p>No outstanding tasks found. Hurrah.</p>
 @else

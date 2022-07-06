@@ -31,7 +31,9 @@ Route::post('/admin/units/{unit}', [\App\Http\Controllers\UnitController::class,
 Route::get('/person/{person}', [\App\Http\Controllers\PeopleController::class, 'show'])->name('people.show');
 Route::get('/reports/people', [\App\Http\Controllers\PeopleReportController::class, 'show'])->name('reports.people');
 Route::get('/reports/outstanding-tasks', [\App\Http\Controllers\OutstandingTaskReportController::class, 'show'])->name('reports.tasks.outstanding');
+Route::get('/reports/outstanding-tasks/export', [\App\Http\Controllers\OutstandingTaskReportController::class, 'export'])->name('reports.tasks.outstanding.export');
 Route::get('/reports/outstanding-tasks-by-task', [\App\Http\Controllers\OutstandingTaskReportController::class, 'showByTask'])->name('reports.tasks.outstanding_by_task');
+Route::get('/reports/outstanding-tasks-by-task/export', [\App\Http\Controllers\OutstandingTaskReportController::class, 'exportByTask'])->name('reports.tasks.outstanding_by_task.export');
 Route::get('/export/arrivals-departures', [\App\Http\Controllers\ExportController::class, 'arrivalsDepartures'])->name('export.arrivals_departures');
 Route::get('/reports/stats', [\App\Http\Controllers\StatsReportController::class, 'show'])->name('reports.stats');
 Route::get('/options', [\App\Http\Controllers\OptionsController::class, 'edit'])->name('options.edit');
